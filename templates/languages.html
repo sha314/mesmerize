@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Languages</h2>
+
+<!-- Add new language form -->
+<form method="POST" class="mb-3">
+    <div class="row">
+        <div class="col-3">
+            <input type="text" name="code" placeholder="Code (e.g. en)" class="form-control" required>
+        </div>
+        <div class="col-6">
+            <input type="text" name="name" placeholder="Language name (e.g. English)" class="form-control" required>
+        </div>
+        <div class="col-3">
+            <button type="submit" class="btn btn-primary w-100">Add</button>
+        </div>
+    </div>
+</form>
+
+<!-- Existing languages -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Language</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lang in langs %}
+        <tr>
+            <td>{{ lang['code'] }}</td>
+            <td>{{ lang['name'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

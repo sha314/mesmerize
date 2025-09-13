@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h2>Results for "{{ query }}"</h2>
+    {% for r in results %}
+        <p>
+            [{{r["language"]}}] {{r["name"]}} ({{r["type"]}}): 
+            {% if r["type"] == "text" %}
+                {{ r["value"] }}
+            {% elif r["type"] == "image" %}
+                <img src="{{ url_for('static', filename=r['value'].split('static/')[1]) }}" width="100">
+            {% elif r["type"] == "audio" %}
+                <audio controls src="{{ url_for('static', filename=r['value'].split('static/')[1]) }}"></audio>
+            {% elif r["type"] == "video" %}
+                <video controls width="200" src="{{ url_for('static', filename=r['value'].split('static/')[1]) }}"></video>
+            {% endif %}
+        </p>
+    {% endfor %}
+</body>
+</html>
+

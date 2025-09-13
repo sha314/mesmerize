@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mesmerize</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .topbar {
+            background: #333; color: white; padding: 10px;
+            text-align: center; font-size: 20px;
+        }
+        .sidebar {
+            height: 100%; width: 200px; position: fixed;
+            top: 50px; left: 0; background: #f4f4f4; padding-top: 20px;
+        }
+        .sidebar a {
+            display: block; padding: 10px; text-decoration: none;
+            color: black;
+        }
+        .sidebar a:hover { background: #ddd; }
+        .content { margin-left: 210px; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="topbar">🌐 Mesmerize</div>
+    <div class="sidebar">
+        <a href="{{ url_for('home') }}">🏠 Home</a>
+        <a href="{{ url_for('add_entry') }}">➕ Add Entry</a>
+        <a href="{{ url_for('search') }}">🔍 Search</a>
+        <a href="{{ url_for('manage_languages') }}">🌍 Languages</a>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

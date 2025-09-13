@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Add New Entry</h2>
+
+<form method="POST" enctype="multipart/form-data" class="mb-3">
+    <!-- Field Name + Language -->
+    <div class="row mb-3">
+        <div class="col">
+            <input type="text" name="field_name" class="form-control" placeholder="Field Name" required>
+        </div>
+        <div class="col">
+<select name="language" class="form-control" required>
+    {% for lang in languages %}
+        <option value="{{ lang['code'] }}">{{ lang['name'] }}</option>
+    {% endfor %}
+</select>
+        </div>
+    </div>
+
+    <!-- Text + Audio -->
+    <div class="row mb-3">
+        <div class="col-10">
+            <textarea name="text_value" rows="3" class="form-control" placeholder="Enter text..."></textarea>
+        </div>
+        <div class="col-2">
+            <button type="button" id="recordBtn" class="btn btn-danger w-100 mb-1">Record</button>
+            <button type="button" id="stopBtn" class="btn btn-secondary w-100 mb-1">Stop</button>
+            <audio id="audioPlayback" controls class="w-100"></audio>
+            <input type="file" name="audio_file" accept="audio/*" hidden>
+        </div>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="mb-3">
+        <label>Upload Image</label>
+        <input type="file" name="image_file" accept="image/*" class="form-control" onchange="previewImage(event)">
+        <img id="imagePreview" class="img-fluid mt-2" style="max-width: 400px; display: none;">
+    </div>
+
+    <!-- Video Upload -->
+    <div class="mb-3">
+        <label>Upload Video</label>
+        <input type="file" name="video_file" accept="video/*" class="form-control" onchange="previewVideo(event)">
+        <video id="videoPreview" class="mt-2" style="max-width: 400px; display: none;" controls></video>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Entry</button>
+</form>
+
+<script>
+function previewImage(event) {
+    let img = document.getElementById("imagePreview");
+    img.src = URL.createObjectURL(event.target.files[0]);
+    img.style.display = "block";
+}
+
+function previewVideo(event) {
+    let vid = document.getElementById("videoPreview");
+    vid.src = URL.createObjectURL(event.target.files[0]);
+    vid.style.display = "block";
+}
+
+// Audio recording (browser)
+let mediaRecorder;
+let audioChunks = [];
+
+document.getElementById("recordBtn").onclick = async () => {
+    let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+        let blob = new Blob(audioChunks, { type: "audio/wav" });
+        let audioURL = URL.createObjectURL(blob);
+        document.getElementById("audioPlayback").src = audioURL;
+
+        // put blob into hidden file input
+        let file = new File([blob], "recording.wav", { type: "audio/wav" });
+        let dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        document.querySelector("input[name='audio_file']").files = dataTransfer.files;
+    };
+};
+
+document.getElementById("stopBtn").onclick = () => {
+    if (mediaRecorder) mediaRecorder.stop();
+};
+</script>
+{% endblock %}

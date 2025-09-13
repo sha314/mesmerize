@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="text-center mt-5">
+    <h1 class="display-4">Welcome to Mesmerize</h1>
+    <p class="lead">Your multilingual memory vault.</p>
+    <p>
+      Store <strong>text</strong>, <strong>images</strong>, <strong>audio</strong>, and <strong>video</strong> 
+      entries in any language. Search and review them anytime.
+    </p>
+    <div class="mt-4">
+      <a href="{{ url_for('add_entry') }}" class="btn btn-primary btn-lg">Add New Entry</a>
+      <a href="{{ url_for('search') }}" class="btn btn-outline-secondary btn-lg">Search Entries</a>
+    </div>
+  </div>
+{% endblock %}
+
